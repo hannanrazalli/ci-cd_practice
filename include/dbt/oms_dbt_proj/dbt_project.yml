@@ -2,11 +2,11 @@
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
-name: 'practice_1'
+name: 'oms_dbt_proj'
 version: '1.0.0'
 
 # This setting configures which "profile" dbt uses for this project.
-profile: 'practice_1'
+profile: 'oms_dbt_proj'
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -30,7 +30,30 @@ clean-targets:         # directories to be removed by `dbt clean`
 # directory as views. These settings can be overridden in the individual model
 # files using the `{{ config(...) }}` macro.
 models:
-  practice_1:
-    # Config indicated by + and applies to all files under models/example/
-    example:
-      +materialized: view
+  oms_dbt_proj:
+    staging:
+      +schema: bronze
+      +materialized: incremental
+    
+    intermediate:
+      +schema: silver
+      +materialized: incremental
+
+    marts:
+      +schema: gold
+      +materialized: incremental
+
+vars:
+  dim_tables:
+    dim_customers:
+      source: "int_transactions_refined"
+      columns: ["cust_id", "is_member"]
+
+  fact_tables:
+    fct_transactions:
+      source: "int_transactions_refined"
+      columns: ['txn_id', 'cust_id', 'amount', 'points', 'status', 'txn_date']
+
+  stg_tables:
+    stg_transactions:
+      columns: ["txn_id", "cust_id", "amount", "points", "is_member", "status", "txn_date"]

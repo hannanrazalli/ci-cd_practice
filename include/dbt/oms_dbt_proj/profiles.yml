@@ -1,0 +1,16 @@
+oms_dbt_proj:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      # Menggunakan env_var supaya dinamik dan selamat
+      project: "{{ env_var('GCP_PROJECT_ID', 'transactions-practice') }}"
+      dataset: "{{ env_var('GCP_DATASET', 'bronze') }}"
+      location: asia-southeast1
+      threads: 1
+      # Tukar kepada nama fail yang akan dijana secara automatik oleh robot CI/CD
+      keyfile: gcp-key.json
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      priority: interactive

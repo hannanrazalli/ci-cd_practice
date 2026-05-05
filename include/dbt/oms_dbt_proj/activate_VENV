@@ -1,0 +1,5 @@
+cd C:\Users\HP\Documents\GitHub\dbt_projects
+
+.\dbt_venv\Scripts\Activate.ps1
+
+cd oms_dbt_proj

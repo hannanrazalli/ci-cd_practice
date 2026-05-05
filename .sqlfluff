@@ -1,0 +1,9 @@
+[sqlfluff]
+templater = dbt
+dialect = bigquery
+
+[sqlfluff:templater:dbt]
+project_dir = ./include/dbt/oms_dbt_proj/
+
+[sqlfluff:indentation]
+tab_width = 4

@@ -1,0 +1,43 @@
+name: dbt-CI-Quality-Gate
+
+on:
+  pull_request:
+    branches: [main, "feature/cicd"]
+
+jobs:
+  dbt-test:
+    runs-on: ubuntu-latest
+    env:
+      DBT_PROJECT_DIR: "include/dbt/oms_dbt_proj"
+      GCP_KEY_PATH: "/tmp/gcp_key.json"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Create Key File
+        run: echo '${{ secrets.GCP_SA_KEY }}' > ${{ env.GCP_KEY_PATH }}
+
+      - name: Install dbt-bigquery
+        run: |
+          pip install dbt-bigquery
+          dbt deps --project-dir $DBT_PROJECT_DIR
+
+      - name: dbt Debug
+        run: |
+          dbt debug --project-dir $DBT_PROJECT_DIR \
+          --profiles-dir .github/workflows/ci_profiles/ \
+          --target dev
+        env:
+          DBT_ENV_SECRET_GCP_KEY_PATH: ${{ env.GCP_KEY_PATH }}
+
+      - name: dbt Compile & Test
+        run: |
+          dbt compile --project-dir $DBT_PROJECT_DIR --profiles-dir .github/workflows/ci_profiles/
+          dbt test --project-dir $DBT_PROJECT_DIR --profiles-dir .github/workflows/ci_profiles/
+        env:
+          DBT_ENV_SECRET_GCP_KEY_PATH: ${{ env.GCP_KEY_PATH }}
