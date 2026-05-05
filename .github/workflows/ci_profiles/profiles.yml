@@ -1,0 +1,21 @@
+oms_dbt_proj:
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: transactions-practice
+      dataset: bronze
+      location: asia-southeast1
+      keyfile: "{{ env_var('DBT_ENV_SECRET_GCP_KEY_PATH') }}"
+      threads: 1
+      priority: interactive
+    prod:
+      type: bigquery
+      method: service-account
+      project: transactions-practice
+      dataset: bronze_prod
+      location: asia-southeast1
+      keyfile: "{{ env_var('PROD_KEY_PATH') }}"
+      threads: 1
+      priority: interactive
+  target: dev

@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: transactions_source
+    database: transactions-practice
+    schema: raw_transactions
+    tables:
+      - name: transactions_batch_1
+        columns:
+          - name: txn_id
+            tests:
+              - unique
+              - not_null
