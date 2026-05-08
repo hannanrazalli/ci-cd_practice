@@ -2,3 +2,8 @@
 astronomer-cosmos
 dbt-bigquery
 apache-airflow-providers-google
+apache-airflow-providers-amazon
+boto3
+python-dotenv
+pandas
+pandas-gbq
