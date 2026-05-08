@@ -13,6 +13,5 @@ SELECT
     {% for cols in fact_cols %}
         {{ cols }}{% if not loop.last %}, {% endif %}
     {% endfor %},
-    CAST(txn_date AS DATE) AS txn_date_key,
     _processed_at
 FROM {{ source_silver }}
